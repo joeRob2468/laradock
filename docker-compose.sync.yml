@@ -12,6 +12,5 @@ services:
       - applications-docker-sync:/var/www:nocopy
 
 volumes:
-  applications-sync:
-    external:
-      name: "applications-docker-sync"
+  applications-docker-sync:
+    external: true

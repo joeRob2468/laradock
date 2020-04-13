@@ -403,8 +403,8 @@ services:
     minio:
       build: ./minio
       volumes:
-        - ${DATA_PATH_HOST}/minio/data:/export
-        - ${DATA_PATH_HOST}/minio/config:/root/.minio
+        - ${DATA_PATH_HOST}-${COMPOSE_PROJECT_NAME}/minio/data:/export
+        - ${DATA_PATH_HOST}-${COMPOSE_PROJECT_NAME}/minio/config:/root/.minio
       ports:
         - "${MINIO_PORT}:9000"
       environment:
@@ -427,7 +427,7 @@ services:
         - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
         - TZ=${WORKSPACE_TIMEZONE}
       volumes:
-        - ${DATA_PATH_HOST}/mysql:/var/lib/mysql
+        - ${DATA_PATH_HOST}-${COMPOSE_PROJECT_NAME}/mysql:/var/lib/mysql
         - ${MYSQL_ENTRYPOINT_INITDB}:/docker-entrypoint-initdb.d
       ports:
         - "${MYSQL_PORT}:3306"
@@ -444,7 +444,7 @@ services:
         - MYSQL_PASSWORD=${PERCONA_PASSWORD}
         - MYSQL_ROOT_PASSWORD=${PERCONA_ROOT_PASSWORD}
       volumes:
-        - ${DATA_PATH_HOST}/percona:/var/lib/mysql
+        - ${DATA_PATH_HOST}-${COMPOSE_PROJECT_NAME}/percona:/var/lib/mysql
         - ${PERCONA_ENTRYPOINT_INITDB}:/docker-entrypoint-initdb.d
       ports:
         - "${PERCONA_PORT}:3306"
@@ -461,7 +461,7 @@ services:
         - SA_PASSWORD=${MSSQL_PASSWORD}
         - ACCEPT_EULA=Y
       volumes:
-        - ${DATA_PATH_HOST}/mssql:/var/opt/mssql
+        - ${DATA_PATH_HOST}-${COMPOSE_PROJECT_NAME}/mssql:/var/opt/mssql
       ports:
         - "${MSSQL_PORT}:1433"
       networks:
@@ -477,7 +477,7 @@ services:
           - no_proxy
           - MARIADB_VERSION=${MARIADB_VERSION}
       volumes:
-        - ${DATA_PATH_HOST}/mariadb:/var/lib/mysql
+        - ${DATA_PATH_HOST}-${COMPOSE_PROJECT_NAME}/mariadb:/var/lib/mysql
         - ${MARIADB_ENTRYPOINT_INITDB}:/docker-entrypoint-initdb.d
       ports:
         - "${MARIADB_PORT}:3306"
@@ -497,7 +497,7 @@ services:
         args:
           - POSTGRES_VERSION=${POSTGRES_VERSION}
       volumes:
-        - ${DATA_PATH_HOST}/postgres:/var/lib/postgresql/data
+        - ${DATA_PATH_HOST}-${COMPOSE_PROJECT_NAME}/postgres:/var/lib/postgresql/data
         - ${POSTGRES_ENTRYPOINT_INITDB}:/docker-entrypoint-initdb.d
       ports:
         - "${POSTGRES_PORT}:5432"
@@ -528,7 +528,7 @@ services:
     postgres-postgis:
       build: ./postgres-postgis
       volumes:
-        - ${DATA_PATH_HOST}/postgres:/var/lib/postgresql/data
+        - ${DATA_PATH_HOST}-${COMPOSE_PROJECT_NAME}/postgres:/var/lib/postgresql/data
       ports:
         - "${POSTGRES_PORT}:5432"
       environment:
@@ -547,7 +547,7 @@ services:
       environment:
         - NEO4J_AUTH=default:secret
       volumes:
-        - ${DATA_PATH_HOST}/neo4j:/var/lib/neo4j/data
+        - ${DATA_PATH_HOST}-${COMPOSE_PROJECT_NAME}/neo4j:/var/lib/neo4j/data
       networks:
         - backend
 
@@ -557,8 +557,8 @@ services:
       ports:
         - "${MONGODB_PORT}:27017"
       volumes:
-        - ${DATA_PATH_HOST}/mongo:/data/db
-        - ${DATA_PATH_HOST}/mongo_config:/data/configdb
+        - ${DATA_PATH_HOST}-${COMPOSE_PROJECT_NAME}/mongo:/data/db
+        - ${DATA_PATH_HOST}-${COMPOSE_PROJECT_NAME}/mongo_config:/data/configdb
       networks:
         - backend
 
@@ -568,7 +568,7 @@ services:
       ports:
         - "${RETHINKDB_PORT}:8080"
       volumes:
-        - ${DATA_PATH_HOST}/rethinkdb:/data/rethinkdb_data
+        - ${DATA_PATH_HOST}-${COMPOSE_PROJECT_NAME}/rethinkdb:/data/rethinkdb_data
       networks:
         - backend
 
@@ -576,7 +576,7 @@ services:
     redis:
       build: ./redis
       volumes:
-        - ${DATA_PATH_HOST}/redis:/data
+        - ${DATA_PATH_HOST}-${COMPOSE_PROJECT_NAME}/redis:/data
       ports:
         - "${REDIS_PORT}:6379"
       networks:
@@ -594,8 +594,8 @@ services:
     zookeeper:
       build: ./zookeeper
       volumes:
-        - ${DATA_PATH_HOST}/zookeeper/data:/data
-        - ${DATA_PATH_HOST}/zookeeper/datalog:/datalog
+        - ${DATA_PATH_HOST}-${COMPOSE_PROJECT_NAME}/zookeeper/data:/data
+        - ${DATA_PATH_HOST}-${COMPOSE_PROJECT_NAME}/zookeeper/datalog:/datalog
       ports:
         - "${ZOOKEEPER_PORT}:2181"
       networks:
@@ -606,7 +606,7 @@ services:
       build: ./aerospike
       volumes:
         - workspace
-        - ${DATA_PATH_HOST}/aerospike:/opt/aerospike/data
+        - ${DATA_PATH_HOST}-${COMPOSE_PROJECT_NAME}/aerospike:/opt/aerospike/data
       ports:
         - "${AEROSPIKE_SERVICE_PORT}:3000"
         - "${AEROSPIKE_FABRIC_PORT}:3001"
@@ -623,7 +623,7 @@ services:
     memcached:
       build: ./memcached
       volumes:
-        - ${DATA_PATH_HOST}/memcached:/var/lib/memcached
+        - ${DATA_PATH_HOST}-${COMPOSE_PROJECT_NAME}/memcached:/var/lib/memcached
       ports:
         - "${MEMCACHED_HOST_PORT}:11211"
       depends_on:
@@ -655,7 +655,7 @@ services:
         - RABBITMQ_DEFAULT_PASS=${RABBITMQ_DEFAULT_PASS}
       hostname: laradock-rabbitmq
       volumes:
-        - ${DATA_PATH_HOST}/rabbitmq:/var/lib/rabbitmq
+        - ${DATA_PATH_HOST}-${COMPOSE_PROJECT_NAME}/rabbitmq:/var/lib/rabbitmq
       depends_on:
         - php-fpm
       networks:
@@ -687,7 +687,7 @@ services:
         - CASSANDRA_RACK=${CASSANDRA_RACK}
       hostname: laradock-cassandra
       volumes:
-        - ${DATA_PATH_HOST}/cassandra:/var/lib/cassandra
+        - ${DATA_PATH_HOST}-${COMPOSE_PROJECT_NAME}/cassandra:/var/lib/cassandra
       depends_on:
         - php-fpm
       networks:
@@ -743,7 +743,7 @@ services:
         - ${APP_CODE_PATH_HOST}:${APP_CODE_PATH_CONTAINER}${APP_CODE_CONTAINER_FLAG}
         - ${CADDY_CONFIG_PATH}:/etc/caddy
         - ${CADDY_HOST_LOG_PATH}:/var/log/caddy
-        - ${DATA_PATH_HOST}:/root/.caddy
+        - ${DATA_PATH_HOST}-${COMPOSE_PROJECT_NAME}:/root/.caddy
       ports:
         - "${CADDY_HOST_HTTP_PORT}:80"
         - "${CADDY_HOST_HTTPS_PORT}:443"
@@ -792,7 +792,7 @@ services:
       ports:
         - "${PGADMIN_PORT}:80"
       volumes:
-        - ${DATA_PATH_HOST}/pgadmin:/var/lib/pgadmin
+        - ${DATA_PATH_HOST}-${COMPOSE_PROJECT_NAME}/pgadmin:/var/lib/pgadmin
       depends_on:
         - postgres
       networks:
@@ -977,7 +977,7 @@ services:
       build:
         context: ./grafana
       volumes:
-        - ${DATA_PATH_HOST}/grafana:/var/lib/grafana
+        - ${DATA_PATH_HOST}-${COMPOSE_PROJECT_NAME}/grafana:/var/lib/grafana
       ports:
         - "${GRAFANA_PORT}:3000"
       networks:
@@ -1009,7 +1009,7 @@ services:
           - ${GRAYLOG_GELF_UDP_PORT}:12201/udp
         user: graylog
         volumes:
-          - ${DATA_PATH_HOST}/graylog:/usr/share/graylog/data
+          - ${DATA_PATH_HOST}-${COMPOSE_PROJECT_NAME}/graylog:/usr/share/graylog/data
         networks:
           - backend
 
@@ -1036,7 +1036,7 @@ services:
           - SOLR_DATAIMPORTHANDLER_MYSQL=${SOLR_DATAIMPORTHANDLER_MYSQL}
           - SOLR_DATAIMPORTHANDLER_MSSQL=${SOLR_DATAIMPORTHANDLER_MSSQL}
       volumes:
-        - ${DATA_PATH_HOST}/solr:/opt/solr/server/solr/mycores
+        - ${DATA_PATH_HOST}-${COMPOSE_PROJECT_NAME}/solr:/opt/solr/server/solr/mycores
       ports:
         - "${SOLR_PORT}:8983"
       networks:
@@ -1046,8 +1046,8 @@ services:
     thumbor:
       build: ./thumbor
       volumes:
-        - ${DATA_PATH_HOST}/thumbor/data:/data
-        - ${DATA_PATH_HOST}/thumbor/data:/logs
+        - ${DATA_PATH_HOST}-${COMPOSE_PROJECT_NAME}/thumbor/data:/data
+        - ${DATA_PATH_HOST}-${COMPOSE_PROJECT_NAME}/thumbor/data:/logs
       ports:
         - "${THUMBOR_PORT}:8000"
       environment:
@@ -1173,7 +1173,7 @@ services:
       build:
         context: ./portainer
       volumes:
-        - ${DATA_PATH_HOST}/portainer_data:/data
+        - ${DATA_PATH_HOST}-${COMPOSE_PROJECT_NAME}/portainer_data:/data
         - /var/run/docker.sock:/var/run/docker.sock
       extra_hosts:
         - "dockerhost:${DOCKER_HOST_IP}"
@@ -1204,8 +1204,8 @@ services:
           gitlab_rails['initial_root_password'] = '${GITLAB_ROOT_PASSWORD}'
           gitlab_rails['gitlab_shell_ssh_port'] = ${GITLAB_HOST_SSH_PORT}
       volumes:
-        - ${DATA_PATH_HOST}/gitlab/config:/etc/gitlab
-        - ${DATA_PATH_HOST}/gitlab/data:/var/opt/gitlab
+        - ${DATA_PATH_HOST}-${COMPOSE_PROJECT_NAME}/gitlab/config:/etc/gitlab
+        - ${DATA_PATH_HOST}-${COMPOSE_PROJECT_NAME}/gitlab/data:/var/opt/gitlab
         - ${GITLAB_HOST_LOG_PATH}:/var/log/gitlab
       ports:
         - "${GITLAB_HOST_HTTP_PORT}:80"
@@ -1225,7 +1225,7 @@ services:
         - REGISTER_NON_INTERACTIVE=${GITLAB_REGISTER_NON_INTERACTIVE}
         - RUNNER_EXECUTOR=shell
       volumes:
-        - ${DATA_PATH_HOST}/gitlab/runner:/etc/gitlab-runner
+        - ${DATA_PATH_HOST}-${COMPOSE_PROJECT_NAME}/gitlab/runner:/etc/gitlab-runner
         - /var/run/docker.sock:/var/run/docker.sock:rw
 
 ### JupyterHub #########################################
@@ -1237,7 +1237,7 @@ services:
         - jupyterhub-user
       volumes:
         - /var/run/docker.sock:/var/run/docker.sock:rw
-        - ${DATA_PATH_HOST}/jupyterhub/:/data
+        - ${DATA_PATH_HOST}-${COMPOSE_PROJECT_NAME}/jupyterhub/:/data
         - ${JUPYTERHUB_CUSTOM_CONFIG}:/jupyterhub_config.py
         - ${JUPYTERHUB_USER_DATA}:/user-data
         - ${JUPYTERHUB_USER_LIST}:/userlist
@@ -1334,7 +1334,7 @@ services:
         - MONGO_URL=${MONGO_WEBUI_MONGO_URL}
         - INSTALL_MONGO=${MONGO_WEBUI_INSTALL_MONGO}
       volumes:
-        - ${DATA_PATH_HOST}/mongo-webui:/data/db
+        - ${DATA_PATH_HOST}-${COMPOSE_PROJECT_NAME}/mongo-webui:/data/db
       ports:
         - "${MONGO_WEBUI_PORT}:3000"
       networks:
@@ -1350,7 +1350,7 @@ services:
       ports:
         - ${METABASE_PORT}:3000
       volumes:
-        - ${DATA_PATH_HOST}/metabase-data:/metabase-data
+        - ${DATA_PATH_HOST}-${COMPOSE_PROJECT_NAME}/metabase-data:/metabase-data
       networks:
         - backend
 
@@ -1370,7 +1370,7 @@ services:
       build:
         context: ./ide-webide
       volumes:
-        - ${DATA_PATH_HOST}/ide/webide/ide.db:/root/.coding-ide/ide.db
+        - ${DATA_PATH_HOST}-${COMPOSE_PROJECT_NAME}/ide/webide/ide.db:/root/.coding-ide/ide.db
       ports:
         - "${IDE_WEBIDE_PORT}:8080"
       networks:
@@ -1388,7 +1388,7 @@ services:
       volumes:
         - /etc/localtime:/etc/localtime:ro
         - ${APP_CODE_PATH_HOST}:${APP_CODE_PATH_CONTAINER}
-        - ${DATA_PATH_HOST}/ide/codiad:/config
+        - ${DATA_PATH_HOST}-${COMPOSE_PROJECT_NAME}/ide/codiad:/config
       ports:
         - "${IDE_CODIAD_PORT}:80"
       networks:
@@ -1417,7 +1417,7 @@ services:
         context: ./docker-registry
       volumes:
         - /etc/localtime:/etc/localtime:ro
-        - ${DATA_PATH_HOST}/docker-registry:/var/lib/registry
+        - ${DATA_PATH_HOST}-${COMPOSE_PROJECT_NAME}/docker-registry:/var/lib/registry
       ports:
         - "${DOCKER_REGISTRY_PORT}:5000"
       networks:
@@ -1445,9 +1445,9 @@ services:
     mailu:
       image: mailu/admin:${MAILU_VERSION}
       volumes:
-        - "${DATA_PATH_HOST}/mailu/data:/data"
-        - "${DATA_PATH_HOST}/mailu/dkim:/dkim"
-        - "${DATA_PATH_HOST}/mailu/webmail:/webmail"
+        - "${DATA_PATH_HOST}-${COMPOSE_PROJECT_NAME}/mailu/data:/data"
+        - "${DATA_PATH_HOST}-${COMPOSE_PROJECT_NAME}/mailu/dkim:/dkim"
+        - "${DATA_PATH_HOST}-${COMPOSE_PROJECT_NAME}/mailu/webmail:/webmail"
         - /var/run/docker.sock:/var/run/docker.sock:ro
       depends_on:
         - mailu-front
@@ -1483,7 +1483,7 @@ services:
         - "465:465"
         - "587:587"
       volumes:
-        - "${DATA_PATH_HOST}/mailu/certs:/certs"
+        - "${DATA_PATH_HOST}-${COMPOSE_PROJECT_NAME}/mailu/certs:/certs"
       networks:
         backend:
           aliases:
@@ -1497,9 +1497,9 @@ services:
         - WEBMAIL=${MAILU_WEBMAIL}
         - RECIPIENT_DELIMITER=${MAILU_RECIPIENT_DELIMITER}
       volumes:
-        - "${DATA_PATH_HOST}/mailu/data:/data"
-        - "${DATA_PATH_HOST}/mailu/mail:/mail"
-        - "${DATA_PATH_HOST}/mailu/overrides:/overrides"
+        - "${DATA_PATH_HOST}-${COMPOSE_PROJECT_NAME}/mailu/data:/data"
+        - "${DATA_PATH_HOST}-${COMPOSE_PROJECT_NAME}/mailu/mail:/mail"
+        - "${DATA_PATH_HOST}-${COMPOSE_PROJECT_NAME}/mailu/overrides:/overrides"
       depends_on:
         - mailu-front
       networks:
@@ -1516,8 +1516,8 @@ services:
         - RECIPIENT_DELIMITER=${MAILU_RECIPIENT_DELIMITER}
         - MESSAGE_SIZE_LIMIT=${MAILU_MESSAGE_SIZE_LIMIT}
       volumes:
-        - "${DATA_PATH_HOST}/mailu/data:/data"
-        - "${DATA_PATH_HOST}/mailu/overrides:/overrides"
+        - "${DATA_PATH_HOST}-${COMPOSE_PROJECT_NAME}/mailu/data:/data"
+        - "${DATA_PATH_HOST}-${COMPOSE_PROJECT_NAME}/mailu/overrides:/overrides"
       depends_on:
         - mailu-front
       networks:
@@ -1527,9 +1527,9 @@ services:
     mailu-antispam:
       image: mailu/rspamd:${MAILU_VERSION}
       volumes:
-        - "${DATA_PATH_HOST}/mailu/filter:/var/lib/rspamd"
-        - "${DATA_PATH_HOST}/mailu/dkim:/dkim"
-        - "${DATA_PATH_HOST}/mailu/overrides/rspamd:/etc/rspamd/override.d"
+        - "${DATA_PATH_HOST}-${COMPOSE_PROJECT_NAME}/mailu/filter:/var/lib/rspamd"
+        - "${DATA_PATH_HOST}-${COMPOSE_PROJECT_NAME}/mailu/dkim:/dkim"
+        - "${DATA_PATH_HOST}-${COMPOSE_PROJECT_NAME}/mailu/overrides/rspamd:/etc/rspamd/override.d"
       depends_on:
         - mailu-front
       networks:
@@ -1539,7 +1539,7 @@ services:
     mailu-antivirus:
       image: mailu/clamav:${MAILU_VERSION}
       volumes:
-        - "${DATA_PATH_HOST}/mailu/filter:/data"
+        - "${DATA_PATH_HOST}-${COMPOSE_PROJECT_NAME}/mailu/filter:/data"
       networks:
         backend:
           aliases:
@@ -1547,7 +1547,7 @@ services:
     mailu-webdav:
       image: mailu/${MAILU_WEBDAV}:${MAILU_VERSION}
       volumes:
-        - "${DATA_PATH_HOST}/mailu/dav:/data"
+        - "${DATA_PATH_HOST}-${COMPOSE_PROJECT_NAME}/mailu/dav:/data"
       networks:
         backend:
           aliases:
@@ -1576,8 +1576,8 @@ services:
         - RECAPTCHA_PUBLIC_KEY=${MAILU_RECAPTCHA_PUBLIC_KEY}
         - RECAPTCHA_PRIVATE_KEY=${MAILU_RECAPTCHA_PRIVATE_KEY}
       volumes:
-        - "${DATA_PATH_HOST}/mailu/data:/data"
-        - "${DATA_PATH_HOST}/mailu/dkim:/dkim"
+        - "${DATA_PATH_HOST}-${COMPOSE_PROJECT_NAME}/mailu/data:/data"
+        - "${DATA_PATH_HOST}-${COMPOSE_PROJECT_NAME}/mailu/dkim:/dkim"
         - /var/run/docker.sock:/var/run/docker.sock:ro
       depends_on:
         - redis
@@ -1588,7 +1588,7 @@ services:
     mailu-webmail:
       image: "mailu/${MAILU_WEBMAIL}:${MAILU_VERSION}"
       volumes:
-        - "${DATA_PATH_HOST}/mailu/webmail:/data"
+        - "${DATA_PATH_HOST}-${COMPOSE_PROJECT_NAME}/mailu/webmail:/data"
       networks:
         backend:
           aliases:
@@ -1598,7 +1598,7 @@ services:
       environment:
         - FETCHMAIL_DELAY=${MAILU_FETCHMAIL_DELAY}
       volumes:
-        - "${DATA_PATH_HOST}/mailu/data:/data"
+        - "${DATA_PATH_HOST}-${COMPOSE_PROJECT_NAME}/mailu/data:/data"
       networks:
         backend:
           aliases:
@@ -1627,7 +1627,7 @@ services:
       build:
         context: ./mosquitto
       volumes:
-        - ${DATA_PATH_HOST}/mosquitto/data:/mosquitto/data
+        - ${DATA_PATH_HOST}-${COMPOSE_PROJECT_NAME}/mosquitto/data:/mosquitto/data
       ports:
         - "${MOSQUITTO_PORT}:9001"
       networks:
@@ -1639,7 +1639,7 @@ services:
       build:
         context: ./couchdb
       volumes:
-        - ${DATA_PATH_HOST}/couchdb/data:/opt/couchdb/data
+        - ${DATA_PATH_HOST}-${COMPOSE_PROJECT_NAME}/couchdb/data:/opt/couchdb/data
       ports:
         - "${COUCHDB_PORT}:5984"
       networks:
@@ -1651,8 +1651,8 @@ services:
         context: ./manticore
       volumes:
         - ${MANTICORE_CONFIG_PATH}:/etc/sphinxsearch
-        - ${DATA_PATH_HOST}/manticore/data:/var/lib/manticore/data
-        - ${DATA_PATH_HOST}/manticore/log:/var/log/manticore
+        - ${DATA_PATH_HOST}-${COMPOSE_PROJECT_NAME}/manticore/data:/var/lib/manticore/data
+        - ${DATA_PATH_HOST}-${COMPOSE_PROJECT_NAME}/manticore/log:/var/log/manticore
       ports:
         - "${MANTICORE_API_PORT}:9312"
         - "${MANTICORE_SPHINXQL_PORT}:9306"
@@ -1666,11 +1666,11 @@ services:
         context: ./sonarqube
       hostname: "${SONARQUBE_HOSTNAME}"
       volumes:
-        - ${DATA_PATH_HOST}/sonarqube/conf:/opt/sonarqube/conf
-        - ${DATA_PATH_HOST}/sonarqube/data:/opt/sonarqube/data
-        - ${DATA_PATH_HOST}/sonarqube/logs:/opt/sonarqube/logs
-        - ${DATA_PATH_HOST}/sonarqube/extensions:/opt/sonarqube/extensions
-        - ${DATA_PATH_HOST}/sonarqube/plugins:/opt/sonarqube/lib/bundled-plugins
+        - ${DATA_PATH_HOST}-${COMPOSE_PROJECT_NAME}/sonarqube/conf:/opt/sonarqube/conf
+        - ${DATA_PATH_HOST}-${COMPOSE_PROJECT_NAME}/sonarqube/data:/opt/sonarqube/data
+        - ${DATA_PATH_HOST}-${COMPOSE_PROJECT_NAME}/sonarqube/logs:/opt/sonarqube/logs
+        - ${DATA_PATH_HOST}-${COMPOSE_PROJECT_NAME}/sonarqube/extensions:/opt/sonarqube/extensions
+        - ${DATA_PATH_HOST}-${COMPOSE_PROJECT_NAME}/sonarqube/plugins:/opt/sonarqube/lib/bundled-plugins
       ports:
         - ${SONARQUBE_PORT}:9000
       depends_on:
@@ -1696,7 +1696,7 @@ services:
       depends_on:
         - postgres
       volumes:
-        - ${DATA_PATH_HOST}/Confluence:/var/atlassian/application-data
+        - ${DATA_PATH_HOST}-${COMPOSE_PROJECT_NAME}/Confluence:/var/atlassian/application-data
 
 ### tomcat ####################################################
     tomcat:
@@ -1708,7 +1708,7 @@ services:
         - frontend
         - backend
       volumes:
-        - ${DATA_PATH_HOST}/tomcat/webapps:/usr/local/tomcat/webapps
-        - ${DATA_PATH_HOST}/tomcat/logs:/usr/local/tomcat/logs
+        - ${DATA_PATH_HOST}-${COMPOSE_PROJECT_NAME}/tomcat/webapps:/usr/local/tomcat/webapps
+        - ${DATA_PATH_HOST}-${COMPOSE_PROJECT_NAME}/tomcat/logs:/usr/local/tomcat/logs
       # restart: always
 
