@@ -2,6 +2,15 @@
 ###################### General Setup ######################
 ###########################################################
 
+### Important Settings ####################################
+
+# Define the prefix of container names. This is useful if you have multiple projects that use laradock to have seperate containers per project.
+COMPOSE_PROJECT_NAME=laradock
+
+### Docker Sync ###########################################
+# For `osx` use 'native_osx', for `windows` use 'unison', for `linux` docker-sync is not required
+DOCKER_SYNC_STRATEGY=native_osx
+
 ### Paths #################################################
 
 # Point to the path of your applications code on your host
@@ -31,9 +40,6 @@ COMPOSE_FILE=docker-compose.yml:docker-compose.sync.yml
 
 # Change the separator from : to ; on Windows
 COMPOSE_PATH_SEPARATOR=:
-
-# Define the prefix of container names. This is useful if you have multiple projects that use laradock to have seperate containers per project.
-COMPOSE_PROJECT_NAME=laradock
 
 ### PHP Version ###########################################
 
@@ -72,11 +78,6 @@ COMPOSE_CONVERT_WINDOWS_PATHS=1
 CHANGE_SOURCE=false
 # Set CHANGE_SOURCE and UBUNTU_SOURCE option if you want to change the Ubuntu system sources.list file.
 UBUNTU_SOURCE=aliyun
-
-### Docker Sync ###########################################
-
-# If you are using Docker Sync. For `osx` use 'native_osx', for `windows` use 'unison', for `linux` docker-sync is not required
-DOCKER_SYNC_STRATEGY=native_osx
 
 ###########################################################
 ################ Containers Customization #################
@@ -155,6 +156,8 @@ WORKSPACE_PGID=1000
 WORKSPACE_CHROME_DRIVER_VERSION=2.42
 WORKSPACE_TIMEZONE=UTC
 WORKSPACE_SSH_PORT=2222
+WORKSPACE_BROWSERSYNC_HOST_PORT=3000
+WORKSPACE_BROWSERSYNC_UI_HOST_PORT=3001
 WORKSPACE_INSTALL_FFMPEG=false
 WORKSPACE_INSTALL_WKHTMLTOPDF=false
 WORKSPACE_INSTALL_GNU_PARALLEL=false
