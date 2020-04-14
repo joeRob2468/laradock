@@ -8,7 +8,7 @@
 COMPOSE_PROJECT_NAME=REPLACE_WITH_PROJECT_NAME
 
 # Choose storage path on your machine. For all storage systems. This is useful if you have multiple projects that use laradock to have separate data per project. 
-DATA_PATH_HOST=~/.REPLACE_WITH_PROJECT_NAME/data
+DATA_PATH_HOST=~/.laradock/REPLACE_WITH_PROJECT_NAME/data
 
 ### Docker Sync ###########################################
 # For `osx` use 'native_osx', for `windows` use 'unison', for `linux` docker-sync is not required
