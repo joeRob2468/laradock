@@ -12,4 +12,4 @@ syncs:
     sync_strategy: '${DOCKER_SYNC_STRATEGY}' # for osx use 'native_osx', for windows use 'unison'
     sync_args: ['-perms=0'] #required for two way sync ie generators, etc
 
-    sync_excludes: ['laradock', 'node_modules', 'cms/vendor', '.git/*', '.idea', '.vscode', '*.log'] # ignored directories
+    sync_excludes: ['laradock', 'vendor', 'node_modules', 'cms/vendor', '.git/*', '.idea', '.vscode', '*.log'] # ignored directories
